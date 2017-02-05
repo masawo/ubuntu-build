@@ -1,0 +1,17 @@
+- hosts: all
+  become: yes
+  gather_facts: true # https://github.com/zzet/ansible-rbenv-role/issues/37
+  vars:
+    rbenv:
+      env: user
+      version: v1.1.0
+      default_ruby: 2.4.0
+      rubies:
+      - version: 2.4.0
+        env:
+          RUBY_CONFIGURE_OPTS: "--enable-shared"
+  roles:
+    - role: zzet.rbenv
+      rbenv_users:
+        - ubuntu
+        - deploy

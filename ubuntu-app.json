@@ -1,0 +1,32 @@
+{
+  "variables": {
+    "version": "0.0.1",
+    "compression_level": "6",
+    "cpus": "1",
+    "headless": "true",
+    "memory": "1024",
+    "home": "{{env `HOME`}}"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      "source_path": "{{user `home`}}/.vagrant.d/boxes/ubuntu/0/virtualbox/box.ovf",
+      "headless": "{{user `headless`}}",
+      "boot_wait": "5s",
+      "ssh_username": "ubuntu",
+      "ssh_password": "ubuntu",
+      "shutdown_command": "echo 'ubuntu' | sudo -S shutdown -P now",
+      "vboxmanage": [
+        ["modifyvm", "{{.Name}}", "--memory", "{{user `memory`}}"],
+        ["modifyvm", "{{.Name}}", "--cpus", "{{user `cpus`}}"]
+      ]
+    }
+  ],
+  "provisioners": [
+  ],
+  "post-processors": [{
+    "type": "vagrant",
+    "compression_level": "{{user `compression_level`}}",
+    "output": "boxes/ubuntu-16.04-amd64-{{.Provider}}-ubuntu-app.box"
+  }]
+}

@@ -1,0 +1,17 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: download nginx 
+    get_url: url='http://nginx.org/download/nginx-1.11.9.tar.gz' dest=/tmp
+  - name: install nginx(with headers-more-nginx-module)
+    shell: |
+      tar zxvf nginx-1.11.9.tar.gz
+      git clone https://github.com/agentzh/headers-more-nginx-module/
+      mkdir src
+      mv headers-more-nginx-module src/
+      cd nginx-1.11.9/
+      ./configure --prefix=/opt/nginx --with-debug --with-http_addition_module --with-http_dav_module --with-http_gzip_static_module --with-http_image_filter_module --with-http_realip_module --with-http_stub_status_module --with-http_ssl_module --with-http_sub_module --with-http_xslt_module --with-ipv6 --with-mail --with-mail_ssl_module --with-http_v2_module  --add-module=/tmp/src/headers-more-nginx-module
+      make
+      make install
+    args:
+      chdir: /tmp

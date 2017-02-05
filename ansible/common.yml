@@ -1,0 +1,43 @@
+- hosts: all
+  become: yes
+  tasks:
+  - name: install basic packages
+    action: >
+      apt name={{ item }} state=present update_cache=yes
+    with_items:
+      - autoconf
+      - automake
+      - build-essential
+      - bison
+      - libgd-dev 
+      - libreadline6
+      - libreadline6-dev
+      - libreadline-dev
+      - libsqlite3-0
+      - libsqlite3-dev
+      - libssl-dev
+      - libyaml-dev
+      - libc6-dev
+      - libncurses5-dev
+      - libtool
+      - libxml2-dev
+      - libxslt1-dev
+      - openssl
+      - sqlite3
+      - zlib1g
+      - zlib1g-dev
+      - libcurl4-openssl-dev
+      - git
+      - libmysqld-dev
+      - imagemagick
+      - graphicsmagick
+      - supervisor
+      - libpcre3
+      - libpcre3-dev
+      - sysv-rc-conf
+  - name: add deploy user
+    user: name=deploy generate_ssh_key=yes ssh_key_bits=2048 ssh_key_file=.ssh/id_rsa
+  - name: copy ssh auth key
+    shell: |
+      cat /home/deploy/.ssh/id_rsa.pub >> /home/ubuntu/.ssh/authorized_keys
+    
